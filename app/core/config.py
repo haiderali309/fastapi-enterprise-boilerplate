@@ -8,6 +8,9 @@ class Settings(BaseSettings):
     ALLOWED_HOSTS : str
     CORS_ORIGINS : str
     ENABLE_HTTPS_REDIRECT : bool = False
+    JWT_SECRET : str
+    JWT_ALGO : str
+    ACCESS_TOKEN_EXPIRY_MINUTE : int
 
 
     model_config=SettingsConfigDict(

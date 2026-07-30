@@ -1,5 +1,5 @@
 from app.core.exception_handlers import AppExceptionHandler
-
+from fastapi import status
 
 
 class EmailAlreadyExistsException(AppExceptionHandler):
@@ -10,7 +10,5 @@ class EmailAlreadyExistsException(AppExceptionHandler):
 
             message=f"Email {email} already exists",
 
-            status_code=409,
-
-            error_code="EMAIL_EXISTS"
+            status_code=status.HTTP_409_CONFLICT,
         )
