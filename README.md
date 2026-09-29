@@ -34,7 +34,7 @@ graph TD
     
     RBAC -->|Allowed| Router[Domain Router]
     
-    subgraph Domain Module (Django-style App)
+    subgraph DomainModule["Domain Module (Django-style App)"]
         Router -->|Calls| Service[Service Layer]
         Service -->|Validates| Schemas[Pydantic Schemas]
         Service -->|Data Access| Repository[Repository Layer]
