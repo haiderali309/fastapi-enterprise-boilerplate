@@ -1,36 +1,59 @@
-# Python cache
+# Python Cache & Byte-code
 __pycache__/
 *.py[cod]
 *$py.class
+*.so
 
-# Virtual environments
+# Environment Variables & Secrets
+.env
+.env.*
+!.env.example
+
+# Virtual Environments
 venv/
 .venv/
 env/
+ENV/
+env.bak/
+venv.bak/
 
-# Environment variables
-.env
+# Logs & Debugging
+logs/
+*.log
+*.log.*
 
-# IDE files
+# Databases & Storage
+*.sqlite
+*.sqlite3
+*.db
+
+# IDEs and Editors
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
 
-# OS files
-.DS_Store
-Thumbs.db
-
-# Test & coverage
+# Testing & Coverage
 .pytest_cache/
 .coverage
 htmlcov/
+.tox/
+.nox/
+.cache/
 
-# Logs
-*.log
-
-# Build files
+# Build & Packaging
 build/
 dist/
 *.egg-info/
+*.egg
 
-# Jupyter
+# Operating System Files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Jupyter Notebooks
 .ipynb_checkpoints/

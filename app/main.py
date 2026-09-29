@@ -1,52 +1,50 @@
-from fastapi import FastAPI ,status
+from fastapi import FastAPI
+from fastapi.exceptions import RequestValidationError
+
 from app.core.config import settings
 from app.core.lifespan import lifespan
-from app.core.middleware import register_middleware , LoggingMiddleware
+from app.core.middleware import register_middleware
 from app.core.logging import logger
-from app.modules.auth.exception import EmailAlreadyExistsException
-from app.core.responses import APIResponse
 from app.core.exception_handlers import (
     AppExceptionHandler,
     app_exception,
-    global_exception)
+    validation_exception,
+    global_exception,
+)
 
-app=FastAPI(
+# Import modular app routers here
+from app.modules.auth.router import router as auth_router
+from app.modules.users.router import router as users_router
+
+# -----------------------------------------------------------------------------
+# FastAPI Application Setup
+# -----------------------------------------------------------------------------
+# We initialize our main FastAPI instance with application title, debug state,
+# and lifespan lifecycle events (database connection startup/shutdown).
+app = FastAPI(
     title=settings.APP_NAME,
     debug=settings.DEBUG,
-    lifespan=lifespan
+    lifespan=lifespan,
 )
 
+# -----------------------------------------------------------------------------
+# Middlewares & Exception Handlers
+# -----------------------------------------------------------------------------
+# Register global middlewares (CORS, GZip, Host validation, Request Logging)
 register_middleware(app)
 
-app.add_exception_handler(
-    AppExceptionHandler,
-    app_exception
-)
+# Custom application exception handler (returns standard JSON format)
+app.add_exception_handler(AppExceptionHandler, app_exception)
 
-app.add_exception_handler(
-    Exception,
-    global_exception
-)
+# Pydantic validation exception handler (cleans up request payload validation errors)
+app.add_exception_handler(RequestValidationError, validation_exception)
 
+# Fallback exception handler for unexpected 500 server crashes
+app.add_exception_handler(Exception, global_exception)
 
-@app.get("/global-error")
-def global_error():
-    x = 10 / 0
-    return x
-
-@app.get("/app-error")
-async def app_error():
-    email="haider@mail.com"
-    logger.error(f'email to  wer gia {email}')
-    return EmailAlreadyExistsException(email)
-
-@app.get('/response')
-async def api_response():
-    return APIResponse.success(
-        data={
-        "app": settings.APP_NAME,
-        "debug": settings.DEBUG
-        },
-        message="Operation completed successfully",
-        status_code=status.HTTP_208_ALREADY_REPORTED
-    )
+# -----------------------------------------------------------------------------
+# Modular Router Registration (Django-like App Routers)
+# -----------------------------------------------------------------------------
+# Include domain routers. Add any new module routers below.
+app.include_router(auth_router)
+app.include_router(users_router)

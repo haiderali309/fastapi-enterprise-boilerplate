@@ -1,7 +1,7 @@
 fastapi
 uvicorn[standard]
 sqlalchemy
-psycopg2-binary
+asyncpg
 pydantic
 email-validator
 python-jose[cryptography]
@@ -10,3 +10,6 @@ bcrypt==4.0.1
 python-multipart
 pydantic-settings
 alembic
+fastapi-mail
+phonenumbers
+psycopg2-binary
