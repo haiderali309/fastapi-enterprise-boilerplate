@@ -263,7 +263,7 @@ logger.exception("An unexpected crash occurred!") # Automatically includes trace
 ### 1. Clone & Setup Environment
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/haiderali309/fastapi-enterprise-boilerplate
 cd fast_api_structure/fast_api
 
 # Create a virtual environment
