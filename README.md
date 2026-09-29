@@ -15,6 +15,41 @@ FastAPI is brilliant, but it leaves project structure up to the developer. This 
 
 ---
 
+## 📊 Architecture Overview
+
+This project is built using a layered architecture pattern, isolating concerns and ensuring that the business logic remains uncoupled from the delivery mechanism (HTTP) and the database.
+
+```mermaid
+graph TD
+    Client((Client)) -->|HTTP Request| FastAPI[FastAPI App]
+    
+    subgraph Core
+        FastAPI --> Middleware[Middleware]
+        Middleware --> ExceptionHandler[Exception Handlers]
+    end
+    
+    Middleware --> SecureRouter[SecureRouter]
+    SecureRouter -->|Validates Token| Auth[Auth / JWT]
+    SecureRouter -->|Checks Permissions| RBAC[Permission Checker]
+    
+    RBAC -->|Allowed| Router[Domain Router]
+    
+    subgraph Domain Module (Django-style App)
+        Router -->|Calls| Service[Service Layer]
+        Service -->|Validates| Schemas[Pydantic Schemas]
+        Service -->|Data Access| Repository[Repository Layer]
+    end
+    
+    Repository -->|SQLAlchemy| Database[(Database)]
+    
+    subgraph Infrastructure
+        Service -.->|Trigger| Email[Email Service / Background Tasks]
+        Service -.->|Log| Logger[Centralized Logger]
+    end
+```
+
+---
+
 ## 📁 Complete Project Structure
 
 ```text
